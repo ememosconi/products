@@ -2,11 +2,16 @@ plugins {
 	id 'org.springframework.boot' version '2.2.0.RC1'
 	id 'io.spring.dependency-management' version '1.0.8.RELEASE'
 	id 'java'
+	id 'net.ltgt.apt' version '0.8'
 }
+
+apply plugin: 'java'
+apply plugin: 'idea'
 
 group = 'com.murmu'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '1.8'
+
 
 configurations {
 	developmentOnly
@@ -31,6 +36,8 @@ dependencies {
 	implementation 'org.springframework.cloud:spring-cloud-starter-config'
 	implementation 'org.springframework.data:spring-data-rest-hal-browser'
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	compileOnly 'org.projectlombok:lombok:1.18.10'
+	annotationProcessor 'org.projectlombok:lombok:1.18.10'
 	runtimeOnly 'com.h2database:h2'
 	runtimeOnly 'mysql:mysql-connector-java'
 	testImplementation('org.springframework.boot:spring-boot-starter-test') {
