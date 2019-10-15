@@ -55,9 +55,6 @@ test {
 	useJUnitPlatform()
 }
 
-task wrapper(type: Wrapper) {
-	gradleVersion = '4.1'
-}
 
 task stage(dependsOn: ['build', 'clean'])
 build.mustRunAfter clean
