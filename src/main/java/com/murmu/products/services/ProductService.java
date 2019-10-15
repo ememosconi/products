@@ -1,68 +1,70 @@
 package com.murmu.products.services;
 
 import com.murmu.products.model.Product;
+import com.murmu.products.repositories.ProductRespository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ProductService {
 
+    private ProductRespository productRespository;
+
+    public ProductService(ProductRespository productRespository){
+        this.productRespository = productRespository;
+    }
+
 
     public List<Product> get(){
 
-        // aca hacemos la logica de negocio y la llamada a repositorios
 
-        Product product1 = new Product();
-        product1.setName("Samsung A7");
-        product1.setDescription("Telefono Samsung A7");
 
-        Product product2 = new Product();
-        product2.setName("Moto G7 plus");
-        product2.setDescription("Telefono Moto G7 plus");
-
-        List<Product> result = new ArrayList<>();
-        result.add(product1);
-        result.add(product2);
-
-        return result;
+        return (List<Product>) productRespository.findAll();
     }
 
     public Product get(Long productId){
 
-        Product result;
+        Optional<Product> resultOptional = productRespository.findById(productId);
 
-        Product product1 = new Product();
-        product1.setName("Samsung A7");
-        product1.setDescription("Telefono Samsung A7");
+        Product result = null;
 
-        Product product2 = new Product();
-        product2.setName("Moto G7 plus");
-        product2.setDescription("Telefono Moto G7 plus");
+        if(resultOptional.isPresent()){
 
-        if(productId == 1L){
-
-            result = product1;
+            result = resultOptional.get();
         }
-        else result = product2;
 
-        result.setId(productId);
         return result;
+
     }
 
     public Product save(Product product){
-       product.setId(1L);
-       return product;
+
+       return productRespository.save(product);
     }
 
     public Product update(Long productId,Product product){
-        product.setId(productId);
-        product.setDescription("Pase por una modificacion");
-        return  product;
+        Optional<Product> optionalProduct = productRespository.findById(productId);
+
+        Product result = null;
+
+        if(optionalProduct.isPresent()){
+            Product productBack = optionalProduct.get();
+            productBack.setDescription(product.getDescription());
+            productBack.setName(product.getName());
+            productBack.setPrice(product.getPrice());
+            result = productRespository.save(productBack);
+        }
+
+        return  result;
     }
 
-    public Long delete(Long productId){
-        return productId;
+    public void delete(Long productId){
+        Optional<Product> productToDelete = productRespository.findById(productId);
+
+        if(productToDelete.isPresent()){
+            productRespository.delete(productToDelete.get());
+        }
     }
 }
