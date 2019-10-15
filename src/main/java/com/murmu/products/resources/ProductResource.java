@@ -52,8 +52,8 @@ public class ProductResource {
     }
 
     @DeleteMapping("/{productId}")
-    public @ResponseBody Long delete(@PathVariable("productId") Long productId){
-        return productService.delete(productId);
+    public void delete(@PathVariable("productId") Long productId){
+        productService.delete(productId);
     }
 
 }
